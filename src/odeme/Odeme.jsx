@@ -1,18 +1,49 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css'; // Bootstrap stil dosyası
 
 const Odeme = () => {
     const [email, setEmail] = useState('infoexxon@paymorph.com');
     const [key, setKey] = useState('7b07ff57a3fcef0c650a11a7ffbc866a');
-    const [iban, setIban] = useState('TR830083800875002128712239');
-    const [tutar, setTutar] = useState();
+    const [iban1, setIban1] = useState('TR830083800875002128712239');
+    const [iban2, setIban2] = useState('TR050083800875002105001411');
+    const [iban3, setIban3] = useState('TR270083800875002113735671');
 
-    const hesapHareketleriHandleSubmit = async (e) => {
+    const [tutar1, setTutar1] = useState();
+    const [tutar2, setTutar2] = useState();
+    const [tutar3, setTutar3] = useState();
+
+    const hesapHareketleriHandleSubmit1 = async (e) => {
         e.preventDefault();
 
         try {
-            const response = await axios.get(`https://api.paymorph.com/transaction/last/list?email=${email}&key=${key}`);
+            const response = await axios.get(`https://api.paymorph.com/transaction/last/list?email=${email}&key=${key}&iban=${iban1}`);
+            console.log(response?.data[0].balance);
+
+            // Servisten dönen cevap içinde balance kontrolü yapılabilir
+            const balance = response?.data[0].balance;
+
+            if (balance === parseFloat(tutar1)) {
+                alert('Başarılı: Tutar ve GÖnderilen para doğru eşleşti.');
+            } else {
+                throw new Error('Hata: Balance ve tutar1 uyuşmuyor.');
+            }
+
+
+
+
+
+        } catch (error) {
+            console.error('Hata:', error);
+            alert('Hata: Tutar ve Gönderilen para uyuşmuyor.');
+        }
+    };
+
+    const hesapHareketleriHandleSubmit2 = async (e) => {
+        e.preventDefault();
+
+        try {
+            const response = await axios.get(`https://api.paymorph.com/transaction/last/list?email=${email}&key=${key}&iban=${iban2}`);
             console.log('Başarıyla gönderildi:', response.data);
 
         } catch (error) {
@@ -20,70 +51,120 @@ const Odeme = () => {
 
         }
     };
-    console.log(tutar);
+    const hesapHareketleriHandleSubmit3 = async (e) => {
+        e.preventDefault();
+
+        try {
+            const response = await axios.get(`https://api.paymorph.com/transaction/last/list?email=${email}&key=${key}&iban=${iban3}`);
+            console.log('Başarıyla gönderildi:', response.data);
+
+        } catch (error) {
+            console.error('Hata:', error);
+
+        }
+    };
+
 
     return (
 
         <div className="container-fluid">
             <div className="card-header">
-                <h3 className="text-center">Lütfen Ödemeyi Yaptığınız IBAN Onaylayın</h3>
+                <h3 className="text-center">Hangi IBAN a ödeme yaptıysanız altındaki tutarı doldurun</h3>
             </div>
             <div className="card">
                 <div className="card-body">
-                    <form onSubmit={hesapHareketleriHandleSubmit}>
+                    <form onSubmit={hesapHareketleriHandleSubmit1}>
                         <div className="form-group">
-                            <label>IBAN:</label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                value={iban}
-                               disabled={true}
-
-                            />
+                            <label>IBAN: {iban1} </label>
                         </div>
-                        <button type="submit" className="btn btn-primary">Bilgileri Gönder</button>
+                        <div>
+                            <label>Alıcı: EXXON</label>
+                        </div>
+                        <div>TUTAR:</div>
+                        <input
+
+                            type="text"
+                            className="form-control"
+                            style={{
+                                width: '200px',      // Genişlik
+                                padding: '8px',      // Dolgu
+                                fontSize: '14px',    // Yazı boyutu
+                                marginLeft: '220px',    // Yazı boyutu
+                                // Diğer istediğiniz stil özellikleri
+                            }}
+                            value={tutar1}
+                            onChange={(event) => {
+                                // Handle onChange directly here
+                                // For example, you can setTutar directly here
+                                setTutar1(event.target.value);
+                            }}
+                        />
+
+                        <button type="submit" className="btn btn-primary mt-2" disabled={!tutar1}>Odeme Kontrol Gönder</button>
                     </form>
                 </div>
             </div>
             <div className="card">
                 <div className="card-body">
-                    <form onSubmit={hesapHareketleriHandleSubmit} >
+                    <form onSubmit={hesapHareketleriHandleSubmit2}>
                         <div className="form-group">
-                            <label>IBAN:</label>
+                            <label>IBAN:{iban2}</label>
+                            <div>
+                                <label>Alıcı: EXXON</label>
+                            </div>
+                            <div>TUTAR:</div>
                             <input
                                 type="text"
+                                style={{
+                                    width: '200px',      // Genişlik
+                                    padding: '8px',      // Dolgu
+                                    fontSize: '14px',    // Yazı boyutu
+                                    marginLeft: '220px',    // Yazı boyutu
+                                    // Diğer istediğiniz stil özellikleri
+                                }}
                                 className="form-control"
-                                value={iban}
-                                disabled={true}
-                            />
-                            <input
-                                type="text"
-                                className="form-control"
-                                value={tutar}
+                                value={tutar2}
                                 onChange={(event) => {
                                     // Handle onChange directly here
                                     // For example, you can setTutar directly here
-                                    setTutar(event.target.value);
+                                    setTutar2(event.target.value);
                                 }}
                             />
                         </div>
-                        <button type="submit" className="btn btn-primary">Bilgileri Gönder</button>
+
+                        <button className="btn btn-primary mt-2" type="submit" disabled={!tutar2}>Odeme Kontrol Gönderr </button>
                     </form>
                 </div>
             </div>
             <div className="card">
                 <div className="card-body">
-                <form onSubmit={hesapHareketleriHandleSubmit}>
+                    <form onSubmit={hesapHareketleriHandleSubmit3}>
                         <div className="form-group">
-                            <label>IBAN:</label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                value={iban}
-                                disabled={true}
-                            />
+                            <label>IBAN:{iban3}</label>
+
                         </div>
-                        <button type="submit" className="btn btn-primary">Bilgileri Gönder</button>
+                        <div>TUTAR:</div>
+                        <div>
+                            <label>Alıcı: EXXON</label>
+                        </div>
+                        <input
+                            style={{
+                                width: '200px',      // Genişlik
+                                padding: '8px',      // Dolgu
+                                fontSize: '14px',    // Yazı boyutu
+                                marginLeft: '220px',    // Yazı boyutu
+                                // Diğer istediğiniz stil özellikleri
+                            }}
+                            type="text"
+                            className="form-control"
+                            value={tutar3}
+                            onChange={(event) => {
+                                // Handle onChange directly here
+                                // For example, you can setTutar directly here
+                                setTutar3(event.target.value);
+                            }}
+                        />
+                        <button className="btn btn-primary mt-2" type="submit" disabled={!tutar3}>Odeme Kontrol Gönder </button>
                     </form>
                 </div>
             </div>
