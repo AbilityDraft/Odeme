@@ -96,7 +96,8 @@ const Odeme = () => {
                                 width: '200px',      // Genişlik
                                 padding: '8px',      // Dolgu
                                 fontSize: '14px',    // Yazı boyutu
-                                marginLeft: '220px',    // Yazı boyutu
+                                marginLeft: '0px',    // Yazı boyutu
+                                borderColor: "black",    // Yazı boyutu
                                 // Diğer istediğiniz stil özellikleri
                             }}
                             value={tutar1}
@@ -111,7 +112,7 @@ const Odeme = () => {
                     </form>
                 </div>
             </div>
-            <div className="card">
+            <div className="card mt-3" >
                 <div className="card-body">
                     <form onSubmit={hesapHareketleriHandleSubmit2}>
                         <div className="form-group">
@@ -126,7 +127,8 @@ const Odeme = () => {
                                     width: '200px',      // Genişlik
                                     padding: '8px',      // Dolgu
                                     fontSize: '14px',    // Yazı boyutu
-                                    marginLeft: '220px',    // Yazı boyutu
+                                    marginLeft: '0px',    // Yazı boyutu
+                                    borderColor: "black",  // Yazı boyutu
                                     // Diğer istediğiniz stil özellikleri
                                 }}
                                 className="form-control"
@@ -143,7 +145,7 @@ const Odeme = () => {
                     </form>
                 </div>
             </div>
-            <div className="card">
+            <div className="card mt-3">
                 <div className="card-body">
                     <form onSubmit={hesapHareketleriHandleSubmit3}>
                         <div className="form-group">
@@ -159,7 +161,8 @@ const Odeme = () => {
                                 width: '200px',      // Genişlik
                                 padding: '8px',      // Dolgu
                                 fontSize: '14px',    // Yazı boyutu
-                                marginLeft: '220px',    // Yazı boyutu
+                                marginLeft: '0px',    // Yazı boyutu
+                                borderColor: "black",    // Yazı boyutu
                                 // Diğer istediğiniz stil özellikleri
                             }}
                             type="text"
