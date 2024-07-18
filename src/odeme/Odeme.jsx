@@ -15,59 +15,66 @@ const Odeme = () => {
 
     const hesapHareketleriHandleSubmit1 = async (e) => {
         e.preventDefault();
-
         try {
             const response = await axios.get(`https://api.paymorph.com/transaction/last/list?email=${email}&key=${key}&iban=${iban1}`);
-            console.log(response?.data[0].balance);
+            const balanceList = response?.data?.data?.map(b => b.balance);
 
-            // Servisten dönen cevap içinde balance kontrolü yapılabilir
-            const balance = response?.data[0].balance;
+            console.log(response.data.data[0].balance);
+            console.log(balanceList);
 
-            if (balance === parseFloat(tutar1)) {
-                alert('Başarılı: Tutar ve GÖnderilen para doğru eşleşti.');
+            if (balanceList.includes( parseFloat(tutar1)) ) {
+                alert('Başarılı: Tutar ve Gönderilen para doğru eşleşti.');
             } else {
-                throw new Error('Hata: Balance ve tutar1 uyuşmuyor.');
+                throw new Error('Hata: Balance ve Gönderilen para uyuşmuyor.');
             }
-
-
-
-
-
         } catch (error) {
-            console.error('Hata:', error);
             alert('Hata: Tutar ve Gönderilen para uyuşmuyor.');
         }
     };
 
     const hesapHareketleriHandleSubmit2 = async (e) => {
         e.preventDefault();
-
         try {
             const response = await axios.get(`https://api.paymorph.com/transaction/last/list?email=${email}&key=${key}&iban=${iban2}`);
-            console.log('Başarıyla gönderildi:', response.data);
+            const balanceList = response?.data?.data?.map(b => b.balance);
 
+            console.log(response.data.data[0].balance);
+            console.log(balanceList);
+
+            if (balanceList.includes( parseFloat(tutar2)) ) {
+                alert('Başarılı: Tutar ve Gönderilen para doğru eşleşti.');
+            } else {
+                throw new Error('Hata: Balance ve Gönderilen para uyuşmuyor.');
+            }
         } catch (error) {
-            console.error('Hata:', error);
-
+            alert('Hata: Tutar ve Gönderilen para uyuşmuyor.');
         }
     };
     const hesapHareketleriHandleSubmit3 = async (e) => {
         e.preventDefault();
-
         try {
             const response = await axios.get(`https://api.paymorph.com/transaction/last/list?email=${email}&key=${key}&iban=${iban3}`);
-            console.log('Başarıyla gönderildi:', response.data);
+            const balanceList = response?.data?.data?.map(b => b.balance);
 
+            console.log(response.data.data[0].balance);
+            console.log(balanceList);
+
+            if (balanceList.includes( parseFloat(tutar1)) ) {
+                alert('Başarılı: Tutar ve Gönderilen para doğru eşleşti.');
+            } else {
+                throw new Error('Hata: Balance ve Gönderilen para uyuşmuyor.');
+            }
         } catch (error) {
-            console.error('Hata:', error);
-
+            alert('Hata: Tutar ve Gönderilen para uyuşmuyor.');
         }
     };
-
 
     return (
 
         <div className="container-fluid">
+            <div style={{ backgroundColor: 'black', color: 'white', padding: '10px', textAlign: 'center' }}>
+                <h2>Ödeme Kontrol Paneli</h2>
+            </div>
             <div className="card-header">
                 <h3 className="text-center">Hangi IBAN a ödeme yaptıysanız altındaki tutarı doldurun</h3>
             </div>
