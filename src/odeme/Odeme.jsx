@@ -96,7 +96,7 @@ const Odeme = () => {
                                 width: '200px',      // Genişlik
                                 padding: '8px',      // Dolgu
                                 fontSize: '14px',    // Yazı boyutu
-                                marginLeft: '0px',    // Yazı boyutu
+                                marginLeft: '220px',    // Yazı boyutu
                                 borderColor: "black",    // Yazı boyutu
                                 // Diğer istediğiniz stil özellikleri
                             }}
@@ -127,7 +127,7 @@ const Odeme = () => {
                                     width: '200px',      // Genişlik
                                     padding: '8px',      // Dolgu
                                     fontSize: '14px',    // Yazı boyutu
-                                    marginLeft: '0px',    // Yazı boyutu
+                                    marginLeft: '220px',    // Yazı boyutu
                                     borderColor: "black",  // Yazı boyutu
                                     // Diğer istediğiniz stil özellikleri
                                 }}
@@ -161,7 +161,7 @@ const Odeme = () => {
                                 width: '200px',      // Genişlik
                                 padding: '8px',      // Dolgu
                                 fontSize: '14px',    // Yazı boyutu
-                                marginLeft: '0px',    // Yazı boyutu
+                                marginLeft: '220px',    // Yazı boyutu
                                 borderColor: "black",    // Yazı boyutu
                                 // Diğer istediğiniz stil özellikleri
                             }}
