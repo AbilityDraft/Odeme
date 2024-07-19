@@ -37,16 +37,16 @@ const AdminPanel = () => {
             console.error('Veri alımı hatası:', error);
         }
     };
+    console.log(selectedRow);
 
     const sendCashoutRequest = async () => {
-        if (!selectedRow) return;
 
         const data = {
             email,
             key,
             name: gondermeList.adSoyad,
             description: gondermeList.aciklama,
-            from_iban: selectedRow.iban,
+            from_iban: selectedRow ? selectedRow.account.iban : gondermeList.from_iban,
             iban: gondermeList.iban,
             balance: gondermeList.tutar,
             identity_id: '12312312312',
@@ -86,7 +86,7 @@ const AdminPanel = () => {
         ],
         []
     );
-
+    console.log(response?.data?.length);
     const {
         getTableProps,
         getTableBodyProps,
@@ -164,12 +164,12 @@ const AdminPanel = () => {
                         })}
                         </tbody>
                     </table>
-                    {selectedRow && (
+                    {selectedRow &&  (
                         <div>
                             <h3>Para Çekim Bilgileri</h3>
+                            <p>{selectedRow?.account.iban}</p>
                             <p>Ad Soyad: </p>
                             <input
-
                                 style={{borderColor:"black", marginTop:"2px" }}
                                 id="iban"
                                 type="text"
@@ -214,6 +214,66 @@ const AdminPanel = () => {
                             >
                                 Bilgileri Gönder
                             </button>
+                        </div> )}
+                    {   response?.data?.length === undefined &&  (
+                        <div>
+                        <h3>Para Çekim Bilgileri</h3>
+                        <p>{selectedRow?.account.iban}</p>
+                        <p>Ad Soyad: </p>
+                        <input
+                        style={{borderColor:"black", marginTop:"2px" }}
+                        id="iban"
+                        type="text"
+                        value={gondermeList?.adSoyad}
+                        onChange={(e) => setGondermeList({ ...gondermeList, adSoyad: e.target.value })}
+                        className="form-control"
+                        />
+                        <p>Tutar: {gondermeList.tutar}</p>
+                        <input
+
+                        style={{borderColor:"black", marginTop:"2px" }}
+                        id="iban"
+                        type="text"
+                        value={gondermeList?.tutar}
+                        onChange={(e) => setGondermeList({ ...gondermeList, tutar: e.target.value })}
+                        className="form-control"
+                        />
+                            <label htmlFor="iban">Paranın Çekileceği IBAN:</label>
+                            <input
+                                style={{borderColor:"black", marginTop:"2px" }}
+                                id="iban"
+                                type="text"
+                                value={gondermeList.from_iban}
+                                onChange={(e) => setGondermeList({ ...gondermeList, from_iban: e.target.value })}
+                                className="form-control"
+                            />
+                        <label htmlFor="iban">Paranın Gönderileceği IBAN:</label>
+                        <input
+
+                        style={{borderColor:"black", marginTop:"2px" }}
+                        id="iban"
+                        type="text"
+                        value={gondermeList.iban}
+                        onChange={(e) => setGondermeList({ ...gondermeList, iban: e.target.value })}
+                        className="form-control"
+                        />
+                        <label htmlFor="iban">Açıklama:</label>
+                        <input
+
+                        style={{borderColor:"black", marginTop:"2px" }}
+                        id="aciklama"
+                        type="text"
+                        value={gondermeList.aciklama}
+                        onChange={(e) => setGondermeList({ ...gondermeList, aciklama: e.target.value })}
+                        className="form-control"
+                        />
+                        <button
+
+                        className="btn btn-success mt-3"
+                        onClick={sendCashoutRequest}
+                        >
+                        Bilgileri Gönder
+                        </button>
                         </div>
                     )}
                 </div>
