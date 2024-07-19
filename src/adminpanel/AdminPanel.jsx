@@ -10,6 +10,11 @@ const AdminPanel = () => {
     const [dbpassword, setDbpassword] = useState('Admin');
     const [isLoggedIn, setIsLoggedIn] = useState(false); // New state to track login status
     const [response, setResponse] = useState([]);
+    const [email, setEmail] = useState('infoexxon@paymorph.com');
+    const [key, setKey] = useState('7b07ff57a3fcef0c650a11a7ffbc866a');
+    const [iban1, setIban1] = useState('TR830083800875002128712239');
+    const [selectedRow, setSelectedRow] = useState(null);
+    const [gondermeList, setGondermeList] = useState({});
 
     const onSubmit = (event) => {
         event.preventDefault();
@@ -22,9 +27,6 @@ const AdminPanel = () => {
 
     const hesapHareketleriHandleSubmit1 = async () => {
         try {
-            const email = 'example@email.com'; // Burada örnek bir email kullanıyorum, gerçek emailinizi geçmelisiniz
-            const key = 'examplekey'; // Burada örnek bir key kullanıyorum, gerçek keyinizi geçmelisiniz
-            const iban1 = 'exampleiban'; // Burada örnek bir iban kullanıyorum, gerçek ibanınızı geçmelisiniz
 
             const response = await axios.get(`https://api.paymorph.com/transaction/last/list?email=${email}&key=${key}&iban=${iban1}`);
             setResponse(response.data?.data); // API'den gelen veriyi state'e kaydet
@@ -33,6 +35,31 @@ const AdminPanel = () => {
         } catch (error) {
             alert('Hata: Veri alınamadı.');
             console.error('Veri alımı hatası:', error);
+        }
+    };
+
+    const sendCashoutRequest = async () => {
+        if (!selectedRow) return;
+
+        const data = {
+            email,
+            key,
+            name: gondermeList.adSoyad,
+            description: gondermeList.aciklama,
+            from_iban: selectedRow.iban,
+            iban: gondermeList.iban,
+            balance: gondermeList.tutar,
+            identity_id: '12312312312',
+            reference_id: `${new Date().getTime()}`, // Benzersiz işlem id'si için timestamp kullanıyoruz
+        };
+
+        try {
+            const response = await axios.post('https://api.paymorph.com/cashout/sipay/send', data);
+            alert('Başarılı: Çekim işlemi başarıyla gerçekleştirildi.');
+            console.log('Response:', response.data);
+        } catch (error) {
+            alert('Hata: Çekim işlemi gerçekleştirilemedi.');
+            console.error('Çekim işlemi hatası:', error);
         }
     };
 
@@ -46,15 +73,15 @@ const AdminPanel = () => {
         () => [
             {
                 Header: 'Ad Soyad',
-                accessor: 'col1', // Örnek olarak API'den dönen veriye göre ayarlayın
+                accessor: 'name', // Örnek olarak API'den dönen veriye göre ayarlayın
             },
             {
                 Header: 'Tutar',
-                accessor: 'col2', // Örnek olarak API'den dönen veriye göre ayarlayın
+                accessor: 'balance', // Örnek olarak API'den dönen veriye göre ayarlayın
             },
             {
-                Header: 'Tarih',
-                accessor: 'col3', // Örnek olarak API'den dönen veriye göre ayarlayın
+                Header: 'Açıklama',
+                accessor: 'desc', // Örnek olarak API'den dönen veriye göre ayarlayın
             },
         ],
         []
@@ -69,9 +96,9 @@ const AdminPanel = () => {
     } = useTable({ columns, data: response });
 
     return (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', height: '100vh' }}>
+        <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'flex-start', flexDirection: 'column', height: '100vh' }}>
             {!isLoggedIn ? (
-                <div style={{ width: '300px', marginBottom: '50px' }}>
+                <div >
                     <form onSubmit={onSubmit} className="container-sm">
                         <div className="mb-3">
                             <label htmlFor="username" className="form-label">Kullanıcı Adı</label>
@@ -105,7 +132,7 @@ const AdminPanel = () => {
                 </div>
             ) : (
                 <div>
-                    <table {...getTableProps()} className="table table-striped" style={{ borderColor: 'black' }}>
+                    <table {...getTableProps()} className="table table-bordered border-primary" style={{ borderColor: 'black' }}>
                         <thead>
                         {headerGroups.map(headerGroup => (
                             <tr {...headerGroup.getHeaderGroupProps()}>
@@ -119,7 +146,14 @@ const AdminPanel = () => {
                         {rows.map(row => {
                             prepareRow(row);
                             return (
-                                <tr {...row.getRowProps()}>
+                                <tr
+                                    {...row.getRowProps()}
+                                    onClick={() => setSelectedRow(row.original)} // Set selected row on click
+                                    style={{
+                                        background: selectedRow === row.original ? '#00afec' : 'white', // Highlight selected row
+                                        cursor: 'pointer',
+                                    }}
+                                >
                                     {row.cells.map(cell => {
                                         return (
                                             <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
@@ -130,8 +164,61 @@ const AdminPanel = () => {
                         })}
                         </tbody>
                     </table>
+                    {selectedRow && (
+                        <div>
+                            <h3>Para Çekim Bilgileri</h3>
+                            <p>Ad Soyad: </p>
+                            <input
+
+                                style={{borderColor:"black", marginTop:"2px" }}
+                                id="iban"
+                                type="text"
+                                value={gondermeList?.adSoyad}
+                                onChange={(e) => setGondermeList({ ...gondermeList, adSoyad: e.target.value })}
+                                className="form-control"
+                            />
+                            <p>Tutar: {gondermeList.tutar}</p>
+                            <input
+
+                                style={{borderColor:"black", marginTop:"2px" }}
+                                id="iban"
+                                type="text"
+                                value={gondermeList?.tutar}
+                                onChange={(e) => setGondermeList({ ...gondermeList, tutar: e.target.value })}
+                                className="form-control"
+                            />
+                            <label htmlFor="iban">Paranın Gönderileceği IBAN:</label>
+                            <input
+
+                                style={{borderColor:"black", marginTop:"2px" }}
+                                id="iban"
+                                type="text"
+                                value={gondermeList.iban}
+                                onChange={(e) => setGondermeList({ ...gondermeList, iban: e.target.value })}
+                                className="form-control"
+                            />
+                            <label htmlFor="iban">Açıklama:</label>
+                            <input
+
+                                style={{borderColor:"black", marginTop:"2px" }}
+                                id="aciklama"
+                                type="text"
+                                value={gondermeList.aciklama}
+                                onChange={(e) => setGondermeList({ ...gondermeList, aciklama: e.target.value })}
+                                className="form-control"
+                            />
+                            <button
+
+                                className="btn btn-success mt-3"
+                                onClick={sendCashoutRequest}
+                            >
+                                Bilgileri Gönder
+                            </button>
+                        </div>
+                    )}
                 </div>
             )}
+
         </div>
     );
 };
