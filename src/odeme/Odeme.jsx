@@ -76,7 +76,7 @@ const Odeme = () => {
                 <h2>Ödeme Kontrol Paneli</h2>
             </div>
             <div className="card-header">
-                <h3 className="text-center">Hangi IBAN a ödeme yaptıysanız altındaki tutarı doldurun</h3>
+                <h3 className="text-center">Ödeme Yaptıktan Sonra Ödeme Bildirimi Yapınız</h3>
             </div>
             <div className="card">
                 <div className="card-body">
@@ -90,13 +90,14 @@ const Odeme = () => {
                         <div>TUTAR:</div>
                         <input
 
-                            type="text"
-                            className="form-control"
+                            type="number"
+                            max='100000'
+                            className="form-control mt-2"
                             style={{
                                 width: '200px',      // Genişlik
                                 padding: '8px',      // Dolgu
-                                fontSize: '14px',    // Yazı boyutu
-                                marginLeft: '220px',    // Yazı boyutu
+                                fontSize: '14px',    // Yazı boyutu  
+                                margin:'auto',                                                            
                                 borderColor: "black",    // Yazı boyutu
                                 // Diğer istediğiniz stil özellikleri
                             }}
@@ -105,76 +106,11 @@ const Odeme = () => {
                                 // Handle onChange directly here
                                 // For example, you can setTutar directly here
                                 setTutar1(event.target.value);
-                            }}
-                        />
+                            }}                        />
 
-                        <button type="submit" className="btn btn-primary mt-2" disabled={!tutar1}>Odeme Kontrol Gönder</button>
-                    </form>
-                </div>
-            </div>
-            <div className="card mt-3" >
-                <div className="card-body">
-                    <form onSubmit={hesapHareketleriHandleSubmit2}>
-                        <div className="form-group">
-                            <label>IBAN:{iban2}</label>
-                            <div>
-                                <label>Alıcı: EXXON</label>
-                            </div>
-                            <div>TUTAR:</div>
-                            <input
-                                type="text"
-                                style={{
-                                    width: '200px',      // Genişlik
-                                    padding: '8px',      // Dolgu
-                                    fontSize: '14px',    // Yazı boyutu
-                                    marginLeft: '220px',    // Yazı boyutu
-                                    borderColor: "black",  // Yazı boyutu
-                                    // Diğer istediğiniz stil özellikleri
-                                }}
-                                className="form-control"
-                                value={tutar2}
-                                onChange={(event) => {
-                                    // Handle onChange directly here
-                                    // For example, you can setTutar directly here
-                                    setTutar2(event.target.value);
-                                }}
-                            />
-                        </div>
-
-                        <button className="btn btn-primary mt-2" type="submit" disabled={!tutar2}>Odeme Kontrol Gönderr </button>
-                    </form>
-                </div>
-            </div>
-            <div className="card mt-3">
-                <div className="card-body">
-                    <form onSubmit={hesapHareketleriHandleSubmit3}>
-                        <div className="form-group">
-                            <label>IBAN:{iban3}</label>
-
-                        </div>
-                        <div>TUTAR:</div>
-                        <div>
-                            <label>Alıcı: EXXON</label>
-                        </div>
-                        <input
-                            style={{
-                                width: '200px',      // Genişlik
-                                padding: '8px',      // Dolgu
-                                fontSize: '14px',    // Yazı boyutu
-                                marginLeft: '220px',    // Yazı boyutu
-                                borderColor: "black",    // Yazı boyutu
-                                // Diğer istediğiniz stil özellikleri
-                            }}
-                            type="text"
-                            className="form-control"
-                            value={tutar3}
-                            onChange={(event) => {
-                                // Handle onChange directly here
-                                // For example, you can setTutar directly here
-                                setTutar3(event.target.value);
-                            }}
-                        />
-                        <button className="btn btn-primary mt-2" type="submit" disabled={!tutar3}>Odeme Kontrol Gönder </button>
+                        <button type="submit" className="btn btn-primary mt-2" disabled={!tutar1}>Odeme Bildir</button>
+                        <p className='mt-2'>Tek İBAN ile en fazla 100.000 TL ödeme yapabilirsiniz</p>
+                        <p>Odeme kontrolü 3 dakika içinde onaylanmazsa yetkiliyle irtibata geçiniz</p>
                     </form>
                 </div>
             </div>
