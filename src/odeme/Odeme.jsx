@@ -16,7 +16,7 @@ const Odeme = () => {
     const hesapHareketleriHandleSubmit1 = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.get(`https://api.paymorph.com/transaction/last/list?email=${email}&key=${key}&iban=${iban1}`);
+            const response = await axios.get('http://213.14.188.27:8080/api/odeme/odemeKontrol');
             const balanceList = response?.data?.data?.map(b => b.balance);
 
             console.log(response.data.data[0].balance);

@@ -31,7 +31,7 @@ const AdminPanel = () => {
     const hesapHareketleriHandleSubmit1 = async () => {
         try {
 
-            const response = await axios.get(`https://api.paymorph.com/transaction/last/list?email=${email}&key=${key}&iban=${iban1}`);
+            const response = await axios.get('http://213.14.188.27:8080/api/odeme/odemeKontrol');
             setResponse(response.data?.data); // API'den gelen veriyi state'e kaydet
             const afterBalanceList = response?.data?.data?.map(b => b.after_balance);
             setMaxAfterBalance(Math.max(...afterBalanceList))
@@ -62,7 +62,7 @@ const AdminPanel = () => {
         };
 
         try {
-            const response = await axios.post('https://api.paymorph.com/cashout/sipay/send', data);
+            const response = await axios.post('http://213.14.188.27:8080/api/odeme/odemeCekme', data);
             setSendCashoutRequest(response)
             if (sendCashoutResponse.data.status === false) {
                 const errorMessages = Object.keys(sendCashoutResponse.data.message)
